@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+    <title><%= siteTitle %></title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><%= siteTitle %></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/post">新規投稿<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br/>
+    <div class="container">
+<!--        
+        <div class="flex-row d-flex align-items-stretch">
+
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                    <a href="$var.link"><div class="jumbotron">
+                    <img border="1" src="$var.thumbnail" class="img-fluid" alt="$var.title" title="$var.title">
+                    <p class="lead">$var.title</p>
+                </div></a>
+            </div>
+
+        </div>
+-->        
+        <!-- 記事の入力 -->
+        <%
+          let postURL = /save/+revision;
+          let urlValue = "";
+          let titleValue = "";
+          let textValue = "";
+          let readonly = false;
+          if (page.url != null){
+            urlValue = page.url;
+            titleValue = page.title;
+            textValue = page.text;
+            readonly = true;
+          }
+        %>
+        
+        <form action=<%=postURL%> method="POST">
+          <div class="form-group">
+            <label for="exampleFormControlInput1">URL</label>
+            <% if ( readonly == true ){ %>
+              <input type="text" class="form-control" id="url" placeholder="URL" name="URL" value=<%=urlValue%> readonly>
+            <% } else { %>
+              <input type="text" class="form-control" id="url" placeholder="URL" name="URL" value=<%=urlValue%>>
+            <% } %>
+          </div> 
+          <div class="form-group">
+            <label for="exampleFormControlInput1">タイトル</label>
+            <input type="text" class="form-control" id="postTitle" placeholder="タイトル" name="title" value=<%=titleValue%>>
+          </div>        
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">記事</label>
+            <textarea class="form-control" id="postText" rows="3" name="text" ><%= textValue %></textarea>
+          </div>
+          
+          <input type="submit" value="送信">
+        </form>
+        
+        <!-- ページスクロール　後日実装               
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        -->    
+    </div>
+
+
+    <br/><br/>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+        
+
+
+</body>
+
+</html>

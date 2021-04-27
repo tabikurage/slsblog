@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Resource Name
+      Parameters:
+      - ResourceName
+
+Parameters:
+  ResourceName:
+    ConstraintDescription: Resource Name
+    Default: slsblog
+    Description: Resource Name
+    Type: String
+
+Resources:
+  SLSBlogDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${ResourceName}-DB
+      AttributeDefinitions:
+        - AttributeName: type
+          AttributeType: S
+        - AttributeName: pagename
+          AttributeType: S
+        - AttributeName: date
+          AttributeType: S
+        - AttributeName: category
+          AttributeType: S
+        - AttributeName: updateDate
+          AttributeType: S
+      KeySchema:
+        - AttributeName: type
+          KeyType: HASH
+        - AttributeName: pagename
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      LocalSecondaryIndexes:
+        - IndexName: DateIndex
+          KeySchema:
+            - AttributeName: type
+              KeyType: HASH
+            - AttributeName: date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      GlobalSecondaryIndexes:
+        - IndexName: CategoryIndex
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+            - AttributeName: date
+              KeyType: RANGE
+          Projection:
+            # 射影に何を含めるか
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: updateIndex
+          KeySchema:
+            - AttributeName: type
+              KeyType: HASH
+            - AttributeName: updateDate
+              KeyType: RANGE
+          Projection:
+            # 射影に何を含めるか
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+        - IndexName: TestIndex
+          KeySchema:
+            - AttributeName: type
+              KeyType: HASH
+            - AttributeName: category
+              KeyType: RANGE
+          Projection:
+            # 射影に何を含めるか
+            ProjectionType: KEYS_ONLY
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+  StaticSite:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${ResourceName}-bucket
+      AccessControl: PublicRead
+      CorsConfiguration:
+        CorsRules:
+          - AllowedOrigins:
+              - '*'
+            AllowedMethods:
+              - GET
+            AllowedHeaders:
+              - '*'
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  StaticSiteS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: StaticSite
+      PolicyDocument:
+        Statement:
+          - Sid: PublicReadGetObject
+            Effect: Allow
+            Principal: "*"
+            Action:
+            - s3:GetObject
+            Resource:
+              Fn::Join: ["", ["arn:aws:s3:::",{"Ref": "StaticSite"},"/*"]]

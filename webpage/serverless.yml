@@ -1,0 +1,56 @@
+service: slsblog-webpage
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-northeast-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        # default
+        - logs:CreateLogStream # default
+        - logs:PutLogEvents # default
+        # dynamodb
+        - dynamodb:query
+      Resource:
+        - '*'
+
+package:
+  exclude:
+    - .git/**
+    - test/**
+    - README.md
+
+functions:
+  serverlessTest:
+    handler: lambda.handler
+    events:
+      - httpApi:
+          path: /
+          method: '*'
+      - httpApi:
+          path: /{proxy+}
+          method: '*'
+
+resources:
+  Resources:
+    HttpApiIntegrationHttpProxy:
+      Type: AWS::ApiGatewayV2::Integration
+      Properties: 
+        ApiId: !Ref HttpApi
+        Description: HTTP proxy integration
+        IntegrationType: HTTP_PROXY
+        IntegrationMethod: GET
+        IntegrationUri: 'http://testsite-css-serverless.s3-website-ap-northeast-1.amazonaws.com/{proxy}'
+        PayloadFormatVersion: "1.0"
+#        RequestParameters:
+#          'integration.request.path.proxy': 'method.request.path.proxy'
+    HttpApiRouteAnyFileProxyVar:
+      Type: AWS::ApiGatewayV2::Route
+      Properties:
+        ApiId: !Ref HttpApi
+        RouteKey: "ANY /file/{proxy+}"
+        Target: !Join
+          - /
+          - - integrations
+            - !Ref HttpApiIntegrationHttpProxy
+        
