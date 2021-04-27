@@ -72,7 +72,7 @@
         <% let link = "/post?pagename=" + dat.pagename %>
         <a href=<%= link %> class="text-decoration-none">
             <div class="row mt-2 text-dark">
-                <div class="col-4"><img src="/file/image/default.jpg" alt="<%= dat.title %>" class="img-thumbnail"></div>
+                <div class="col-4"><img src="<%= dat.thumbnail %>" alt="<%= dat.title %>" class="img-thumbnail"></div>
                 <div class="col-8">
                     <h2><%= dat.title %><br/></h2>
                     <td><%= dat.createDate %></td>

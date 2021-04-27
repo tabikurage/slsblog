@@ -49,12 +49,14 @@
           let postURL = /save/+revision;
           let urlValue = "";
           let titleValue = "";
+          let thumbnailValue = "";
           let textValue = "";
           let readonly = false;
           if (page.url != null){
             urlValue = page.url;
-            titleValue = page.title;
-            textValue = page.text;
+            titleValue = page.item.title;
+            thumbnailValue = page.item.thumbnail;
+            textValue = page.item.text;
             readonly = true;
           }
         %>
@@ -71,7 +73,11 @@
           <div class="form-group">
             <label for="exampleFormControlInput1">タイトル</label>
             <input type="text" class="form-control" id="postTitle" placeholder="タイトル" name="title" value=<%=titleValue%>>
-          </div>        
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlInput1">サムネイル</label>
+            <input type="text" class="form-control" id="postThumbnail" placeholder="/file/image/xxxx.jpg" name="thumbnail" value=<%=thumbnailValue%>>
+          </div>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">記事</label>
             <textarea class="form-control" id="postText" rows="3" name="text" ><%= textValue %></textarea>

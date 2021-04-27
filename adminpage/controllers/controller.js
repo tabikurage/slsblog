@@ -132,8 +132,7 @@ module.exports.post = (req, res, next) => {
                         siteTitle: siteName + "管理ページ",
                         page: {
                             url: pagename,
-                            title: data2.Items[0].title,
-                            text: data2.Items[0].text
+                            item: data2.Items[0]
                         },
                         revision: revision + 1
                     };
@@ -180,6 +179,7 @@ module.exports.save = (req, res, next) => {
                 pagename: req.body.URL + ':' + req.params.revision,
                 title: req.body.title,
                 text: req.body.text,
+                thumbnail: req.body.thumbnail,
                 date: updateDate
             };
 
@@ -205,6 +205,7 @@ module.exports.save = (req, res, next) => {
                     pagename: req.body.URL,
                     title: req.body.title,
                     revision: req.params.revision,
+                    thumbnail: req.body.thumbnail,
                     createDate: updateDate,
                     updateDate: updateDate
                 };
@@ -227,14 +228,16 @@ module.exports.save = (req, res, next) => {
                     ExpressionAttributeNames: {
                         "#x": "title",
                         "#y": "updateDate",
-                        "#z": "revision"
+                        "#z": "revision",
+                        '#a': "thumbnail"
                     },
                     ExpressionAttributeValues: {
                         ':x': req.body.title,
                         ':y': updateDate,
-                        ':z': req.params.revision
+                        ':z': req.params.revision,
+                        ':a': req.body.thumbnail
                     },
-                    UpdateExpression: "SET #x = :x, #y = :y, #z = :z",
+                    UpdateExpression: "SET #x = :x, #y = :y, #z = :z, #a = :a",
                     ReturnValues: "UPDATED_NEW"
                 };
 

@@ -132,8 +132,7 @@ module.exports.post = (req, res, next) => {
                         siteTitle: siteName + "管理ページ",
                         page: {
                             url: pagename,
-                            title: data2.Items[0].title,
-                            text: data2.Items[0].text
+                            item: data2.Items[0]
                         },
                         revision: revision + 1
                     };
