@@ -75,6 +75,8 @@ module.exports.post = (req, res, next) => {
 
     let revision = 0;
     let pagename = "";
+    let updateDate = "";
+    let createDate = "";
 
     if (req.query.pagename != null) {
         async.waterfall(
@@ -100,7 +102,9 @@ module.exports.post = (req, res, next) => {
                     if (data1.Count > 0) {
                         revision = parseInt(data1.Items[0].revision, 10);
                         pagename = data1.Items[0].pagename;
-
+                        updateDate = moment(data1.Items[0].updateDate).utcOffset("+09:00").format("YYYY-MM-DD HH:mm");
+                        createDate = moment(data1.Items[0].createDate).utcOffset("+09:00").format("YYYY-MM-DD HH:mm");
+                        
                         let params = {
                             TableName: DBName,
                             KeyConditionExpression: '#typ = :hkey and #pgname = :rkey',
@@ -129,18 +133,21 @@ module.exports.post = (req, res, next) => {
                 }
                 if (data2.Count > 0) {
                     let variable = {
-                        siteTitle: siteName + "管理ページ",
+                        siteTitle: siteName,
+                        updateDate: updateDate,
+                        createDate: createDate,
                         page: {
                             url: pagename,
-                            item: data2.Items[0]
                         },
+                        item: data2.Items[0],
                         revision: revision + 1
                     };
+                    console.log(variable);
                     res.render("post", variable);
                 }
                 else {
                     let variable = {
-                        siteTitle: siteName + "管理ページ",
+                        siteTitle: siteName ,
                         revision: 1,
                         page: {}
                     };
@@ -151,7 +158,7 @@ module.exports.post = (req, res, next) => {
     }
     else {
         let variable = {
-            siteTitle: siteName + "管理ページ",
+            siteTitle: siteName,
             revision: 1,
             page: {}
         };
