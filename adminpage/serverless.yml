@@ -1,4 +1,4 @@
-service: serverless-express-test
+service: slsblog-adminpage
 
 provider:
   name: aws
@@ -14,7 +14,11 @@ provider:
         - "dynamodb:*"
       Resource:
         - '*'
-
+        
+custom:
+  resourceName: slsblog-testsite
+  websiteName: SLSBlog
+  
 package:
   exclude:
     - .git/**
@@ -24,6 +28,11 @@ package:
 functions:
   serverlessTest:
     handler: lambda.handler
+    environment:
+      DB_NAME: ${self:custom.resourceName}-DB
+      SITE_NAME: ${self:custom.websiteName}管理ページ
+      BASIC_AUTH_USERNAME: username
+      BASIC_AUTH_PASSWORD: password
     events:
       - httpApi:
           path: /

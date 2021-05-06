@@ -13,12 +13,14 @@ Parameters:
     Default: slsblog
     Description: Resource Name
     Type: String
+    AllowedPattern: "[a-z/-]*"
 
 Resources:
   SLSBlogDB:
     Type: AWS::DynamoDB::Table
     Properties:
       TableName: !Sub ${ResourceName}-DB
+      BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: type
           AttributeType: S
@@ -26,19 +28,19 @@ Resources:
           AttributeType: S
         - AttributeName: date
           AttributeType: S
-        - AttributeName: category
-          AttributeType: S
         - AttributeName: updateDate
+          AttributeType: S
+        - AttributeName: createDate
           AttributeType: S
       KeySchema:
         - AttributeName: type
           KeyType: HASH
         - AttributeName: pagename
           KeyType: RANGE
-      ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
-      LocalSecondaryIndexes:
+#      ProvisionedThroughput:
+#        ReadCapacityUnits: 1
+#        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
         - IndexName: DateIndex
           KeySchema:
             - AttributeName: type
@@ -47,19 +49,6 @@ Resources:
               KeyType: RANGE
           Projection:
             ProjectionType: ALL
-      GlobalSecondaryIndexes:
-        - IndexName: CategoryIndex
-          KeySchema:
-            - AttributeName: category
-              KeyType: HASH
-            - AttributeName: date
-              KeyType: RANGE
-          Projection:
-            # 射影に何を含めるか
-            ProjectionType: KEYS_ONLY
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
         - IndexName: updateIndex
           KeySchema:
             - AttributeName: type
@@ -67,23 +56,15 @@ Resources:
             - AttributeName: updateDate
               KeyType: RANGE
           Projection:
-            # 射影に何を含めるか
-            ProjectionType: KEYS_ONLY
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
-        - IndexName: TestIndex
+            ProjectionType: ALL
+        - IndexName: createIndex
           KeySchema:
             - AttributeName: type
               KeyType: HASH
-            - AttributeName: category
+            - AttributeName: createDate
               KeyType: RANGE
           Projection:
-            # 射影に何を含めるか
-            ProjectionType: KEYS_ONLY
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
+            ProjectionType: ALL
   StaticSite:
     Type: AWS::S3::Bucket
     Properties:

@@ -14,6 +14,10 @@ provider:
       Resource:
         - '*'
 
+custom:
+  resourceName: slsblog-testsite
+  websiteName: SLSBlog
+  
 package:
   exclude:
     - .git/**
@@ -23,6 +27,9 @@ package:
 functions:
   serverlessTest:
     handler: lambda.handler
+    environment:
+      DB_NAME: ${self:custom.resourceName}-DB
+      SITE_NAME: ${self:custom.websiteName}
     events:
       - httpApi:
           path: /
@@ -40,7 +47,7 @@ resources:
         Description: HTTP proxy integration
         IntegrationType: HTTP_PROXY
         IntegrationMethod: GET
-        IntegrationUri: 'http://testsite-css-serverless.s3-website-ap-northeast-1.amazonaws.com/{proxy}'
+        IntegrationUri: 'http://${self:custom.resourceName}-bucket.s3-website-ap-northeast-1.amazonaws.com/{proxy}'
         PayloadFormatVersion: "1.0"
 #        RequestParameters:
 #          'integration.request.path.proxy': 'method.request.path.proxy'

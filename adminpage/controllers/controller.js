@@ -8,14 +8,14 @@ const async = require("async");
 const moment = require("moment");
 
 // アプリケーション固有設定
-const DBName = 'SLSBlogDB';
-const siteName = "SLSBlog";
+//const DBName = 'SLSBlogDB';
+//const siteName = "SLSBlog";
 
 module.exports.index = (req, res, next) => {
     console.log(req.query);
 
     let variable = {
-        siteTitle: siteName + "管理ページ",
+        siteTitle: process.env.SITE_NAME,
         page: [{
             title: "",
             updateDate: "",
@@ -29,7 +29,7 @@ module.exports.index = (req, res, next) => {
         [
             function(callback) { //記事一覧の取得
                 let params = {
-                    TableName: DBName,
+                    TableName: process.env.DB_NAME,
                     IndexName: 'updateIndex',
                     KeyConditionExpression: '#typ = :hkey',
                     ExpressionAttributeNames: {
@@ -81,7 +81,7 @@ module.exports.post = (req, res, next) => {
             [
                 function(callback) {
                     let params = {
-                        TableName: DBName,
+                        TableName: process.env.DB_NAME,
                         KeyConditionExpression: '#typ = :hkey and #pgname = :rkey',
                         ExpressionAttributeNames: {
                             "#typ": "type",
@@ -102,7 +102,7 @@ module.exports.post = (req, res, next) => {
                         pagename = data1.Items[0].pagename;
 
                         let params = {
-                            TableName: DBName,
+                            TableName: process.env.DB_NAME,
                             KeyConditionExpression: '#typ = :hkey and #pgname = :rkey',
                             ExpressionAttributeNames: {
                                 "#typ": "type",
@@ -129,7 +129,7 @@ module.exports.post = (req, res, next) => {
                 }
                 if (data2.Count > 0) {
                     let variable = {
-                        siteTitle: siteName + "管理ページ",
+                        siteTitle: process.env.SITE_NAME,
                         page: {
                             url: pagename,
                             item: data2.Items[0]
@@ -140,7 +140,7 @@ module.exports.post = (req, res, next) => {
                 }
                 else {
                     let variable = {
-                        siteTitle: siteName + "管理ページ",
+                        siteTitle: process.env.SITE_NAME,
                         revision: 1,
                         page: {}
                     };
@@ -151,7 +151,7 @@ module.exports.post = (req, res, next) => {
     }
     else {
         let variable = {
-            siteTitle: siteName + "管理ページ",
+            siteTitle: process.env.SITE_NAME,
             revision: 1,
             page: {}
         };
@@ -184,7 +184,7 @@ module.exports.save = (req, res, next) => {
             };
 
             let params = {
-                TableName: DBName,
+                TableName: process.env.DB_NAME,
                 Item: item,
                 Expected: {
                     "pagename": { Exists: false }
@@ -211,7 +211,7 @@ module.exports.save = (req, res, next) => {
                 };
 
                 let params = {
-                    TableName: DBName,
+                    TableName: process.env.DB_NAME,
                     Item: item,
                 };
 
@@ -220,7 +220,7 @@ module.exports.save = (req, res, next) => {
             // 既存アイテムがあるとき
             else {
                 let params = {
-                    TableName: DBName,
+                    TableName: process.env.DB_NAME,
                     Key: {
                         "type": 'rev',
                         "pagename": req.body.URL
