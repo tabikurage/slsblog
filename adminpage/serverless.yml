@@ -11,7 +11,8 @@ provider:
         - logs:CreateLogStream # default
         - logs:PutLogEvents # default
         # dynamodb
-        - "dynamodb:*"
+        - "dynamodb:query"
+#        - "dynamodb:*"
       Resource:
         - '*'
         
