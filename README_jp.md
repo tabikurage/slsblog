@@ -7,7 +7,7 @@ AWS Lambda, API Gateway, DynamoDBを利用したブログサービス
 
 ## Install
 
-1. リソースの名前を決めます。リソース名には、英小文字(a-z)とハイフンのみ使用できます。例として、**resource-example**を使用します。
+1. リソースの名前を決めます。リソース名には、英小文字(a-z)とハイフンのみ使用できます。例として、*resource-example*を使用します。
 
 2. `/webpage/serverless.yml` を開き、17～19行目を以下のように変更します。
    ```
@@ -22,8 +22,10 @@ AWS Lambda, API Gateway, DynamoDBを利用したブログサービス
    cd database
    sh ./install.sh resource-example
    cd ../adminpage
+   npm install
    sls deploy -v
    cd ../webpage
+   npm install
    sls deploy -v
    ```
 

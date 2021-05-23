@@ -4,7 +4,7 @@ Create a blog without a server, using AWS Lambda, API Gateway and DynamoDB
 
 ## Install
 
-1. Decide on a resource name. Include only lowercase letters (a-z) and hyphens (-) in the resource name. For example, use **resource-example**.
+1. Decide on a resource name. Include only lowercase letters (a-z) and hyphens (-) in the resource name. For example, use *resource-example*.
 
 2. Open `/webpage/serverless.yml` and edit line 17-19 as follows:
    ```
@@ -20,8 +20,10 @@ Create a blog without a server, using AWS Lambda, API Gateway and DynamoDB
    cd database
    sh ./install.sh resource-example
    cd ../adminpage
+   npm install
    sls deploy -v
    cd ../webpage
+   npm install
    sls deploy -v
    ```
 
