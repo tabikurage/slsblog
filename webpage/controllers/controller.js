@@ -6,8 +6,7 @@ const AWS = require("aws-sdk");
 const docClient = new AWS.DynamoDB.DocumentClient({ region: 'ap-northeast-1' });
 const async = require("async");
 const moment = require("moment");
-
-
+const marked = require("marked");
 
 module.exports.index = (req, res, next) => {
     console.log(req.query);
@@ -135,6 +134,7 @@ module.exports.post = (req, res, next) => {
                         siteTitle: process.env.SITE_NAME,
                         updateDate: updateDate,
                         createDate: createDate,
+                        text_marked: marked(data2.Items[0].text),
                         page: {
                             url: pagename,
                         },
@@ -146,7 +146,7 @@ module.exports.post = (req, res, next) => {
                 }
                 else {
                     let variable = {
-                        siteTitle: process.env.SITE_NAME ,
+                        siteTitle: process.env.SITE_NAME,
                         revision: 1,
                         page: {}
                     };

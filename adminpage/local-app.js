@@ -1,7 +1,7 @@
 const app = require('./app');
 
 // 環境変数の設定
-process.env.DB_NAME = "slsblog-testsite-DB";
+process.env.DB_NAME = "SLSBlogDB";
 process.env.SITE_NAME = "SLSBlog管理ページ";
 process.env.BASIC_AUTH_USERNAME = "username";
 process.env.BASIC_AUTH_PASSWORD = "password";
